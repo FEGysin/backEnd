@@ -1,4 +1,7 @@
 const fs = require("fs");
+const app = require("express");
+const { execPath } = require("process");
+const PORT = 8080;
 class ProductMannager {
   #path = "./data";
   #data;
@@ -43,32 +46,36 @@ class ProductMannager {
     }
     return res;
   };
+  LoadData = async () => {
+    if (!fs.existsSync(`${this.#path}/stock.dat`)) {
+      addProducts();
+      console.log(JSON.stringify(this.products));
+
+      return;
+    }
+    console.log(this.products);
+    try {
+      let nwData = await fs.promises.readFile(
+        `${this.#path}/stock.dat`,
+        "utf8"
+      );
+      console.log(nwData);
+      //  this.products = JSON.parse(this.#data);
+      console.log(JSON.parse(nwData));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 }
 const PM = new ProductMannager();
 
-addProducts();
-console.log("Listado de Productos");
-console.log(PM.getProducts());
-console.log("");
-console.log("");
-console.log(`Producto id=1`);
-console.log(PM.getProductById(1));
-console.log(`Producto id=5`);
-console.log(PM.getProductById(5));
-console.log(`Producto id=2`);
-console.log(PM.getProductById(2));
-console.log(`Producto id=4`);
-console.log(PM.getProductById(4));
-console.log(`Producto id=3`);
-console.log(PM.getProductById(3));
-console.log(`Producto id=6`);
-console.log(PM.getProductById(6));
+PM.LoadData();
 
 function addProducts() {
   // title, price, thumbnail, stock
   PM.addProduct("Madera de Pino", 200, "./img/MaderaPino.jpg", `md-Pino`, 20);
   PM.addProduct(
-    "Madera de Quebracho",
+    "Madera de Quebracho Colorado",
     500,
     "./img/QuebrachoColorado.jpg",
     "md-QuebCol",
@@ -81,15 +88,57 @@ function addProducts() {
     "md-Espinillo",
     10
   );
-
-  PM.addProduct("Madera de Pino", 200, "./img/MaderaPino.jpg", `md-Pino`, 20); //Duplicado
+  PM.addProduct(
+    "Madera de Quebracho Blanco",
+    450,
+    "./img/QuebrachoBlanco.jpg",
+    "md-QuebBco",
+    10
+  );
 
   PM.addProduct(
-    "Carbon de Quebracho Blanco",
+    "Madera Eucalipto",
+    350,
+    "./img/Eucalipto.jpg",
+    "md-Eucalipto",
+    15
+  );
+
+  PM.addProduct(
+    "Carbon de Quebracho Blanco 5kg",
     350,
     "./img/CarbonQuebrBlanco.jpg",
-    "cb-QuebBco",
+    "cb-QuebBco-5kg",
+    25
+  );
+
+  PM.addProduct(
+    "Carbon de Quebracho Blanco 10kg",
+    600,
+    "./img/CarbonQuebrBlanco.jpg",
+    "cb-QuebBco-10kg",
     25
   );
   PM.addProduct("Briquetas", 600, "./img/Briquetas.jpg", "cb-Briq", 15);
+  PM.addProduct(
+    "Pastillas Fuego Facil",
+    150,
+    "./img/FuegoFacil.jpg",
+    "ig-FuegFacil",
+    15
+  );
+  PM.addProduct(
+    "Benzina 250ml",
+    250,
+    "./img/Briquetas.jpg",
+    "ig-Benzina-250",
+    15
+  );
+  PM.addProduct(
+    "Alcohol de Quemar",
+    100,
+    "./img/Alcohol.jpg",
+    "ig-AlcQuemar",
+    15
+  );
 }
