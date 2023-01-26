@@ -1,7 +1,4 @@
-const fs = require("fs");
-const app = require("express");
-const { execPath } = require("process");
-const PORT = 8080;
+import fs from "fs";
 class ProductMannager {
   #path = "./data";
   #data;
@@ -26,11 +23,6 @@ class ProductMannager {
         product.id = this.products[this.products.length - 1].id + 1;
       }
       this.products.push(product);
-      this.#data = JSON.stringify(this.products);
-      fs.promises
-        .writeFile(`${this.#path}/stock.dat`, this.#data, "utf-8")
-        .then(() => console.log("Fichero actualizado}"))
-        .catch((err) => console.log(err));
       return;
     }
     return console.log(`Duplicated Code "${productId}"`);
@@ -40,28 +32,33 @@ class ProductMannager {
   };
   getProductById = (id) => {
     const res = this.products.filter((product) => product.id === id);
-    // console.log(res);
     if (res.length === 0) {
       return '"Product not Found"';
     }
     return res;
   };
+
+  SaveData = () => {
+    this.#data = JSON.stringify(this.products);
+    fs.promises
+      .writeFile(`${this.#path}/stock.dat`, this.#data, "utf-8")
+      .then(() => console.log("Fichero actualizado}"))
+      .catch((err) => console.log(err));
+    return;
+  };
+
   LoadData = async () => {
     if (!fs.existsSync(`${this.#path}/stock.dat`)) {
       addProducts();
-      console.log(JSON.stringify(this.products));
-
-      return;
+      // return;
     }
-    console.log(this.products);
     try {
-      let nwData = await fs.promises.readFile(
+      this.#data = await fs.promises.readFile(
         `${this.#path}/stock.dat`,
         "utf8"
       );
-      console.log(nwData);
-      //  this.products = JSON.parse(this.#data);
-      console.log(JSON.parse(nwData));
+      this.products = JSON.parse(this.#data);
+      console.log(this.products);
     } catch (err) {
       console.log(err);
     }
@@ -73,7 +70,7 @@ PM.LoadData();
 
 function addProducts() {
   // title, price, thumbnail, stock
-  PM.addProduct("Madera de Pino", 200, "./img/MaderaPino.jpg", `md-Pino`, 20);
+  PM.addProduct("Madera de Pino", 200, "./img/MaderaPino.jpg", "md-Pino", 20);
   PM.addProduct(
     "Madera de Quebracho Colorado",
     500,
@@ -130,7 +127,7 @@ function addProducts() {
   PM.addProduct(
     "Benzina 250ml",
     250,
-    "./img/Briquetas.jpg",
+    "./img/Benzinma250.jpg",
     "ig-Benzina-250",
     15
   );
@@ -141,4 +138,5 @@ function addProducts() {
     "ig-AlcQuemar",
     15
   );
+  PM.SaveData();
 }
