@@ -26,7 +26,8 @@ const LoadData = async () => {
     console.log(err);
   }
 };
-
+LoadData();
+console.log(Products);
 const SaveData = async () => {
   try {
     await fs.promises.writeFile(
