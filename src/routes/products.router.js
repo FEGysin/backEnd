@@ -16,7 +16,7 @@ const nwProduct = {
 };
 const LoadData = async () => {
   try {
-    let data = await fs.promises.readFile(`${path}/stock.dat`, "utf8");
+    let data = await fs.promises.readFile(`${path}/products.json`, "utf8");
     let parsedData = [];
     parsedData = JSON.parse(data);
     parsedData.forEach((product) => {
@@ -30,7 +30,7 @@ const LoadData = async () => {
 const SaveData = async () => {
   try {
     await fs.promises.writeFile(
-      `${path}/stock.dat`,
+      `${path}/products.json`,
       JSON.stringify(Products),
       "utf-8"
     );
@@ -58,6 +58,11 @@ router.get("/:pId", (req, res) => {
 
 router.post("/:pId", (req, res) => {
   let prod = req.body;
+  if (!prod.description || !prod.code || !prod.price || !prod.category)
+    return res.status(400).send({
+      message: "Faltan Datos sobre el Producto Transaccion Cancelada",
+    });
+
   nwProduct.id = getNwIndex();
   nwProduct.description = prod.description;
   nwProduct.code = prod.code;
@@ -93,6 +98,7 @@ router.put("/:pId", (req, res) => {
   }
   prod.description = product.description;
   prod.stock = product.stock;
+  Products[index] = prod;
 
   SaveData();
   return res
