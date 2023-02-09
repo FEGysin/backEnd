@@ -1,21 +1,34 @@
 import fs from "fs";
 class ProductMannager {
-  #path = "./data";
+  #path = "./src/data";
   #data;
   constructor() {
     this.products = [];
   }
 
-  addProduct = (producto, precio, imgPath, productId, stock) => {
+  addProduct = (
+    producto,
+    detalle,
+    productId,
+    precio,
+    stock,
+    category,
+    imgPath
+  ) => {
     const product = {
       id: 0,
       title: producto,
-      price: precio,
-      thumbnail: imgPath,
+      description: detalle,
       code: productId,
+      price: precio,
+      status: true,
       stock: stock,
+      category: category,
+      thumbnails: imgPath,
     };
-
+    console.log(
+      this.products.findIndex((product) => product.code !== productId)
+    );
     if (this.products.findIndex((product) => product.code === productId)) {
       if (this.products.length === 0) {
         product.id = 1;
@@ -23,38 +36,68 @@ class ProductMannager {
         product.id = this.products[this.products.length - 1].id + 1;
       }
       this.products.push(product);
-      return;
+
+      return true;
     }
-    return console.log(`Duplicated Code "${productId}"`);
+    return false;
   };
+
+  delProduct = (id) => {
+    const index = getIndex(id);
+
+    if (!product.status) {
+      return false;
+    }
+    product.status = false;
+    this.products[index] = product;
+    return true;
+  };
+
+  modProduct = (id, description, stock) => {
+    const index = this.getIndex(id);
+    let product = this.products[index];
+    product.description = description;
+    product.stock = stock;
+    product.status = true;
+    this.products[index] = product;
+    return true;
+  };
+
+  getIndex = (id) => {
+    const index = this.products.findindex((prod) => prod.id === parseInt(id));
+    return index;
+  };
+
   getProducts = () => {
-    return this.products;
+    return this.products.filter((product) => product.status === true);
   };
-  getProductById = (id) => {
-    const res = this.products.filter((product) => product.id === id);
-    if (res.length === 0) {
-      return '"Product not Found"';
+
+  getProductById = (id, bExists = false) => {
+    const res = this.products.find((product) => product.id === parseInt(id));
+    if (!res) {
+      return false;
     }
-    return res;
+    if (!bExists) return res;
+    return true;
   };
 
   SaveData = () => {
     this.#data = JSON.stringify(this.products);
     fs.promises
-      .writeFile(`${this.#path}/stock.dat`, this.#data, "utf-8")
+      .writeFile(`${this.#path}/products.json`, this.#data, "utf-8")
       .then(() => console.log("Fichero actualizado}"))
       .catch((err) => console.log(err));
     return;
   };
 
   LoadData = async () => {
-    if (!fs.existsSync(`${this.#path}/stock.dat`)) {
+    if (!fs.existsSync(`${this.#path}/products.json`)) {
       addProducts();
-      // return;
+      return;
     }
     try {
       this.#data = await fs.promises.readFile(
-        `${this.#path}/stock.dat`,
+        `${this.#path}/products.json`,
         "utf8"
       );
       this.products = JSON.parse(this.#data);
@@ -69,74 +112,52 @@ const PM = new ProductMannager();
 PM.LoadData();
 
 function addProducts() {
-  // title, price, thumbnail, stock
-  PM.addProduct("Madera de Pino", 200, "./img/MaderaPino.jpg", "md-Pino", 20);
-  PM.addProduct(
-    "Madera de Quebracho Colorado",
-    500,
+  // producto, detalle, productId, precio, stock, category, imgPath
+  PM.addProduct("Madera de Pino", "", "md-Pino", 200, 20, "", [
+    "./img/MaderaPino.jpg",
+  ]);
+  PM.addProduct("Madera de Quebracho Colorado", "", "md-QuebCol", 500, 5, "", [
     "./img/QuebrachoColorado.jpg",
-    "md-QuebCol",
-    5
-  );
-  PM.addProduct(
-    "Madera de Espinillo",
-    350,
+  ]);
+  PM.addProduct("Madera de Espinillo", "", "md-Espinillo", 350, 10, "", [
     "./img/MaderaEspinillo.jpg",
-    "md-Espinillo",
-    10
-  );
-  PM.addProduct(
-    "Madera de Quebracho Blanco",
-    450,
+  ]);
+  PM.addProduct("Madera de Quebracho Blanco", "", "md-QuebBco", 450, 10, "", [
     "./img/QuebrachoBlanco.jpg",
-    "md-QuebBco",
-    10
-  );
-
-  PM.addProduct(
-    "Madera Eucalipto",
-    350,
+  ]);
+  PM.addProduct("Madera Eucalipto", "", "md-Eucalipto", 350, 15, "", [
     "./img/Eucalipto.jpg",
-    "md-Eucalipto",
-    15
-  );
-
+  ]);
   PM.addProduct(
     "Carbon de Quebracho Blanco 5kg",
-    350,
-    "./img/CarbonQuebrBlanco.jpg",
+    "",
     "cb-QuebBco-5kg",
-    25
+    350,
+    25,
+    "",
+    ["./img/CarbonQuebrBlanco.jpg"]
   );
-
   PM.addProduct(
     "Carbon de Quebracho Blanco 10kg",
-    600,
-    "./img/CarbonQuebrBlanco.jpg",
+    "",
     "cb-QuebBco-10kg",
-    25
+    600,
+    25,
+    "",
+    ["./img/CarbonQuebrBlanco.jpg"]
   );
-  PM.addProduct("Briquetas", 600, "./img/Briquetas.jpg", "cb-Briq", 15);
-  PM.addProduct(
-    "Pastillas Fuego Facil",
-    150,
+  PM.addProduct("Briquetas", "", "cb-Briq", 600, 15, "", [
+    "./img/Briquetas.jpg",
+  ]);
+  PM.addProduct("Pastillas Fuego Facil", "", "ig-FuegFacil", 150, 15, "", [
     "./img/FuegoFacil.jpg",
-    "ig-FuegFacil",
-    15
-  );
-  PM.addProduct(
-    "Benzina 250ml",
-    250,
+  ]);
+  PM.addProduct("Benzina 250ml", "", "ig-Benzina-250", 250, 15, "", [
     "./img/Benzinma250.jpg",
-    "ig-Benzina-250",
-    15
-  );
-  PM.addProduct(
-    "Alcohol de Quemar",
-    100,
+  ]);
+  PM.addProduct("Alcohol de Quemar", "", "ig-AlcQuemar", 100, 50, "", [
     "./img/Alcohol.jpg",
-    "ig-AlcQuemar",
-    15
-  );
+  ]);
   PM.SaveData();
 }
+export default PM;

@@ -71,6 +71,7 @@ router.post("/:pId", (req, res) => {
   (nwProduct.status = true), (nwProduct.stock = prod.stock);
   nwProduct.category = prod.category;
   nwProduct.thumbnails = prod.thumbnails;
+
   Products.push(nwProduct);
   SaveData();
   return res.status(201).send({ message: "Producto Agregado Exitosamente" });
@@ -78,7 +79,7 @@ router.post("/:pId", (req, res) => {
 
 router.put("/:pId", (req, res) => {
   const { pId } = req.params;
-  const index = Products.findIndex((prod) => prod.id === parseInt(uId));
+  const index = Products.findIndex((prod) => prod.id === parseInt(pId));
   if (!index) {
     return res.status(404).send({ message: "Producto Inexistente" });
   }
@@ -120,6 +121,7 @@ router.delete("/:pId", (req, res) => {
       .send({ message: "El Producto ya esta Marcado para Eliminar" });
   }
   prod.status = false;
+  Products[index] = prod;
   return res.status(201).send({ message: "Producto Marcado para Eliminar" });
   SaveData();
 }); //Cambio estado a False
