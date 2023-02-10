@@ -1,7 +1,8 @@
+import { log } from "console";
 import fs from "fs";
 class ProductMannager {
   #path = "./src/data";
-  #data;
+  #data = "";
   constructor() {
     this.products = [];
   }
@@ -26,17 +27,17 @@ class ProductMannager {
       category: category,
       thumbnails: imgPath,
     };
-    console.log(
-      this.products.findIndex((product) => product.code !== productId)
-    );
-    if (this.products.findIndex((product) => product.code === productId)) {
+    const index = this.products.find((product) => product.code === productId);
+    console.log(index);
+    if (!index) {
       if (this.products.length === 0) {
         product.id = 1;
       } else {
         product.id = this.products[this.products.length - 1].id + 1;
       }
-      this.products.push(product);
 
+      this.products.push(product);
+      PM.SaveData();
       return true;
     }
     return false;
@@ -60,6 +61,7 @@ class ProductMannager {
     product.stock = stock;
     product.status = true;
     this.products[index] = product;
+    PM.SaveData();
     return true;
   };
 
@@ -68,8 +70,10 @@ class ProductMannager {
     return index;
   };
 
-  getProducts = () => {
-    return this.products.filter((product) => product.status === true);
+  getProducts = (limit = 0, bDel = false) => {
+    if (!bDel)
+      return this.products.filter((product) => product.status === true);
+    return this.products;
   };
 
   getProductById = (id, bExists = false) => {
@@ -82,10 +86,14 @@ class ProductMannager {
   };
 
   SaveData = () => {
+    console.log("Guardando");
+    console.log(JSON.stringify(this.products));
+    console.log("");
+    console.log("Datos : " + this.#data);
     this.#data = JSON.stringify(this.products);
     fs.promises
       .writeFile(`${this.#path}/products.json`, this.#data, "utf-8")
-      .then(() => console.log("Fichero actualizado}"))
+      .then(() => console.log("Fichero actualizado"))
       .catch((err) => console.log(err));
     return;
   };
@@ -101,7 +109,6 @@ class ProductMannager {
         "utf8"
       );
       this.products = JSON.parse(this.#data);
-      console.log(this.products);
     } catch (err) {
       console.log(err);
     }
@@ -158,6 +165,5 @@ function addProducts() {
   PM.addProduct("Alcohol de Quemar", "", "ig-AlcQuemar", 100, 50, "", [
     "./img/Alcohol.jpg",
   ]);
-  PM.SaveData();
 }
 export default PM;
