@@ -25,7 +25,7 @@ app.set("view engine", "handlebars");
 app.use(express.json());
 
 app.use(urlencoded({ extended: true }));
-app.use("/virtual", express.static(__dirname + "public"));
+app.use("/virtual", express.static(__dirname + "/public"));
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/cart", cartsRouter);
@@ -34,7 +34,10 @@ io.on("connection", (socket) => {
   console.log("Conexion Establecida");
   socket.emit("refreshData", PM.getProducts());
 
-  io.on("actuData", () => {
+  socket.on("addProduct", (msg) => {
+    const { product, description, code, category, price, stock } = msg;
+    const thumbs = [];
+    PM.addProduct(product, description, code, category, price, stock, thumbs);
     socket.emit("refreshData", PM.getProducts());
   });
 });

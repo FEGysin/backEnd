@@ -29,6 +29,6 @@ router.post("/realtimeProducts", (req, res) => {
     thumbs
   );
   PM.SaveData;
-  return res.status(201).send({ message: "Producto Agregado Exitosamente" });
+  return res.status(201);
 });
 export default router;
