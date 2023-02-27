@@ -1,8 +1,6 @@
 import express, { urlencoded } from "express";
 import handlebars from "express-handlebars";
-import viewsRouter from "./routes/views.router.js";
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/carts.router.js";
+
 import { Server } from "socket.io";
 import PM from "./index.js";
 import dotenv from "dotenv";
@@ -26,9 +24,7 @@ app.use(express.json());
 
 app.use(urlencoded({ extended: true }));
 app.use("/virtual", express.static(__dirname + "/public"));
-app.use("/", viewsRouter);
-app.use("/api/products", productsRouter);
-app.use("/api/cart", cartsRouter);
+
 
 io.on("connection", (socket) => {
   console.log("Conexion Establecida");
