@@ -1,4 +1,3 @@
-import { log } from "console";
 import fs from "fs";
 class ProductMannager {
   #path = "./src/data";
@@ -166,4 +165,4 @@ function addProducts() {
     "./img/Alcohol.jpg",
   ]);
 }
-export default PM;
+//export default PM;

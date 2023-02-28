@@ -1,10 +1,11 @@
 import express, { urlencoded } from "express";
 import handlebars from "express-handlebars";
-
+import startConnection from "../config/mongoDbConn.js";
 import { Server } from "socket.io";
-import PM from "./index.js";
+import PM from "./Dao/index.js";
+import useRouter from "./routes/routes.js";
 import dotenv from "dotenv";
-import __dirname from "./dirname.js";
+import __dirname from "./utils/dirname.js";
 //console.log(__dirname);
 dotenv.config();
 const app = express();
@@ -24,7 +25,7 @@ app.use(express.json());
 
 app.use(urlencoded({ extended: true }));
 app.use("/virtual", express.static(__dirname + "/public"));
-
+app.use(useRouter);
 
 io.on("connection", (socket) => {
   console.log("Conexion Establecida");
