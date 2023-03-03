@@ -1,5 +1,5 @@
 import express from "express";
-import PM from "../index.js";
+import PM from "../Dao/index.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {

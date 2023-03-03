@@ -1,6 +1,6 @@
 import express, { urlencoded } from "express";
 import handlebars from "express-handlebars";
-import startConnection from "../config/mongoDbConn.js";
+import startConnection from "../src/config/mongoDbConn.js";
 import { Server } from "socket.io";
 import PM from "./Dao/index.js";
 import useRouter from "./routes/routes.js";

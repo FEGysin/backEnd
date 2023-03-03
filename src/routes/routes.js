@@ -9,4 +9,5 @@ router.use("/", viewsRouter);
 router.use("/api/products", productsRouter);
 router.use("/api/cart", cartsRouter);
 
-module.exports = router;
+export default router;
+// module.exports = router;

@@ -1,4 +1,4 @@
-import { connect, Connection } from "mongoose";
+import { connect } from "mongoose";
 const startConnection = async () => {
   try {
     const url =
@@ -11,4 +11,5 @@ const startConnection = async () => {
   }
 };
 
-module.exports = { startConnection };
+// module.exports = { startConnection };
+export default startConnection;

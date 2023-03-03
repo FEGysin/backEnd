@@ -1,4 +1,4 @@
-import PM from "../index.js";
+import PM from "../Dao/index.js";
 import fs from "fs";
 import { Router } from "express";
 const path = "./src/data";

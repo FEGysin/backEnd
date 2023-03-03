@@ -165,4 +165,4 @@ function addProducts() {
     "./img/Alcohol.jpg",
   ]);
 }
-//export default PM;
+export default PM;
