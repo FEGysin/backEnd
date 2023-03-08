@@ -1,20 +1,21 @@
-import PM from "../Dao/index.js";
-import fs from "fs";
+// import PM from "../Dao/index.js";
+// import fs from "fs";
 import { Router } from "express";
-const path = "./src/data";
+// const path = "./src/data";
+import PM from "../Dao/ProductManager.js";
 const router = Router();
 const Products = [];
-const nwProduct = {
-  id: 0,
-  title: "",
-  description: "",
-  code: "",
-  price: 0,
-  status: true,
-  stock: 0,
-  category: "",
-  thumbnails: [],
-};
+// const nwProduct = {
+//   id: 0,
+//   title: "",
+//   description: "",
+//   code: "",
+//   price: 0,
+//   status: true,
+//   stock: 0,
+//   category: "",
+//   thumbnails: [],
+// };
 
 //const LoadData = async () => {
 //  try {
@@ -41,44 +42,78 @@ const nwProduct = {
 // }
 //};
 
-const getNwIndex = () => {
-  return Products[Products.length - 1].id + 1;
-};
-router.get("/", (req, res) => {
-  const { limit } = req.query;
-  //if (!limit || !Number.isInteger(parseInt(limit))) res.send(Products);
-  //const prodList = Products.filter((product) => product.id <= limit);
-  //res.send(prodList);
-  if (!limit || !Number.isInteger(parseInt(limit))) res.send(PM.getProducts());
-  res.send(PM.getProducts(limit));
+// const getNwIndex = () => {
+//   return Products[Products.length - 1].id + 1;
+// };
+router.get("/", async (req, res) => {
+  try {
+    const { limit } = req.query;
+    if (!limit || !Number.isInteger(parseInt(limit)))
+      res.send(await PM.getProducts());
+    res.send(await PM.getProducts(limit));
+  } catch (error) {
+    console.log(error);
+  }
+  // const { limit } = req.query;
+  // if (!limit || !Number.isInteger(parseInt(limit))) res.send(PM.getProducts());
+  // res.send(PM.getProducts(limit));
 }); //Get all Products
 
-router.get("/:pId", (req, res) => {
+router.get("/:pId", async (req, res) => {
   const { pId } = req.params;
   // const product = Products.find((item) => item.id === parseInt(pId));
   // if (!product) res.status(400).send("Producto invalido o inexistente");
-  const product = PM.getProductById(pId);
-  if (!product) res.status(400).send("Producto invalido o inexistente");
-  res.send(product);
+  try {
+    const product = await PM.getProductById(pId);
+    if (!product) res.status(400).send("Producto invalido o inexistente");
+    res.json(product);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Producto invalido o inexistente");
+  }
+  // const product = PM.getProductById(pId);
+  // if (!product) res.status(400).send("Producto invalido o inexistente");
+  // res.send(product);
 }); //Get Product Info
 
-router.post("/", (req, res) => {
-  let prod = req.body;
-  if (!prod.description || !prod.code || !prod.price || !prod.category)
-    return res.status(400).send({
-      message: "Faltan Datos sobre el Producto Transaccion Cancelada",
-    });
-  console.log("Post");
+router.post("/", async (req, res) => {
+  const { title, description, code, price, stock, category } = req.body;
   const thumbs = [];
-  PM.addProduct(
-    prod.product,
-    prod.description,
-    prod.code,
-    prod.price,
-    prod.stock,
-    prod.category,
-    thumbs
-  );
+
+  if (!description || !code || !price || !category)
+    res.status(400).send({
+      message: "Faltan Datos sobre el Producto, Transaccion Cancelada",
+    });
+
+  // console.log("Post");
+  try {
+    await PM.addProduct(
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+      thumbs
+    );
+    res.status(201).send({ message: "Producto Agregado Exitosamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      message: "Error al agregar Producto, Transaccion Cancelada",
+    });
+  }
+
+  // const thumbs = [];
+  // PM.addProduct(
+  //   prod.product,
+  //   prod.description,
+  //   prod.code,
+  //   prod.price,
+  //   prod.stock,
+  //   prod.category,
+  //   thumbs
+  // );
   // nwProduct.id = getNwIndex();
   // nwProduct.description = prod.description;
   // nwProduct.code = prod.code;
@@ -89,57 +124,71 @@ router.post("/", (req, res) => {
   //
   // Products.push(nwProduct);
   // SaveData();
-  PM.SaveData;
-  return res.status(201).send({ message: "Producto Agregado Exitosamente" });
+  // PM.SaveData;
+  // return res.status(201).send({ message: "Producto Agregado Exitosamente" });
 }); //Add New Product
 
-router.put("/:pId", (req, res) => {
+router.put("/:pId", async (req, res) => {
   const { pId } = req.params;
-  const index = Products.findIndex((prod) => prod.id === parseInt(pId));
-  if (!index) {
-    return res.status(404).send({ message: "Producto Inexistente" });
-  }
-  let product = req.body;
-  if (!product.code || !product.description || !product.stock) {
-    return res.status(400).send({
+  // const index = Products.findIndex((prod) => prod.id === parseInt(pId));
+  // if (!index) {
+  //   res.status(404).send({ message: "Producto Inexistente" });
+  // }
+  const { code, description, stock } = req.body;
+  if (!code || !description || !stock) {
+    res.status(400).send({
       message: `Faltan enviar datos del Producto ${
         !product.code ? " Codigo" : ""
       } ${!product.description ? " Descripcion del Producto" : ""}${
         !product.stock ? " Stock Disponible" : ""
       }`,
     });
+    try {
+      await PM.modProduct(pId, code, description, stock);
+      res.status(201).send({ message: "Producto Actualizado Correctamente" });
+    } catch (error) {
+      res
+        .status(400)
+        .send({ message: "Error al Actualizar, Transaccion Cancelada" });
+    }
   }
-  let prod = Products[index];
 
-  if (!prod.status) {
-    prod.status = true;
-  }
-  prod.description = product.description;
-  prod.stock = product.stock;
-  Products[index] = prod;
+  // let prod = Products[index];
 
-  SaveData();
-  return res
-    .status(201)
-    .send({ message: "Producto Actualizado Correctamente" });
+  // if (!prod.status) {
+  //   prod.status = true;
+  // }
+  // prod.description = product.description;
+  // prod.stock = product.stock;
+  // Products[index] = prod;
+
+  // SaveData();
+  //res.status(201).send({ message: "Producto Actualizado Correctamente" });
 }); //Modify Product Data (Detail, Stock, Price)
 
-router.delete("/:pId", (req, res) => {
+router.delete("/:pId", async (req, res) => {
   const { pId } = req.params;
-  const index = Products.findIndex((prod) => prod.id === parseInt(uId));
-  if (!index) {
-    return res.status(404).send({ message: "Producto Inexistente" });
+  try {
+    await PM.delProduct(pId);
+    return res.status(201).send({ message: "Producto Marcado para Eliminar" });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "No se Pudo Eliminar Producto" });
   }
-  let prod = Products[index];
-  if (!prod.status) {
-    return res
-      .status(400)
-      .send({ message: "El Producto ya esta Marcado para Eliminar" });
-  }
-  prod.status = false;
-  Products[index] = prod;
-  return res.status(201).send({ message: "Producto Marcado para Eliminar" });
-  SaveData();
+  // const index = Products.findIndex((prod) => prod.id === parseInt(uId));
+  // if (!index) {
+  //   return res.status(404).send({ message: "Producto Inexistente" });
+  // }
+  // let prod = Products[index];
+  // if (!prod.status) {
+  //   return res
+  //     .status(400)
+  //     .send({ message: "El Producto ya esta Marcado para Eliminar" });
+  // }
+  // prod.status = false;
+  // Products[index] = prod;
+  // return res.status(201).send({ message: "Producto Marcado para Eliminar" });
+  //SaveData();
 }); //Cambio estado a False
 
 export default router;

@@ -1,6 +1,15 @@
 import { Schema, model } from "mongoose";
 const collection = "messages";
-const MsgSchema = new Schema({});
+const MsgSchema = new Schema({
+  user: {
+    type: String,
+    required: true,
+    index: true,
+  },
+  message: {
+    type: string,
+  },
+});
 const MsgModel = model(collection, MsgSchema);
 
-module.exports = { MsgModel };
+export default MsgModel;

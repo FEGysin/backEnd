@@ -11,11 +11,12 @@ const ProductSchema = new Schema({
   code: {
     type: String,
     required: true,
+    index: true,
   },
   price: {
     type: Number,
   },
-  status: { type: (Boolean = true) },
+  status: { type: Boolean, default: true },
   stock: { type: Number },
   category: {
     type: String,

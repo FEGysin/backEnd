@@ -1,85 +1,64 @@
+import ProductModel from "../models/product.model.js";
 class ProductMannager {
   constructor() {
-    this.products = [];
+    // this.products = [];
   }
 
   addProduct = (
-    producto,
-    detalle,
-    productId,
-    precio,
+    title,
+    description,
+    code,
+    price,
     stock,
     category,
-    imgPath
+    thumbnails
   ) => {
-    const product = {
-      id: 0,
-      title: producto,
-      description: detalle,
-      code: productId,
-      price: precio,
-      status: true,
-      stock: stock,
-      category: category,
-      thumbnails: imgPath,
-    };
-    const index = this.products.find((product) => product.code === productId);
-    console.log(index);
-    if (!index) {
-      if (this.products.length === 0) {
-        product.id = 1;
-      } else {
-        product.id = this.products[this.products.length - 1].id + 1;
-      }
-
-      this.products.push(product);
-      PM.SaveData();
-      return true;
-    }
-    return false;
+    // const{ title,
+    //   description,
+    //   code,
+    //   price,
+    //   stock,
+    //   category,
+    //   thumbnails}=params
+    return ProductModel.create({
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+      thumbnails,
+    });
   };
 
   delProduct = (id) => {
-    const index = getIndex(id);
-
-    if (!product.status) {
-      return false;
-    }
-    product.status = false;
-    this.products[index] = product;
-    return true;
+    return ProductModel.updateOne({ _id: id }, { status: false });
   };
 
-  modProduct = (id, description, stock) => {
-    const index = this.getIndex(id);
-    let product = this.products[index];
-    product.description = description;
-    product.stock = stock;
-    product.status = true;
-    this.products[index] = product;
-    PM.SaveData();
-    return true;
-  };
-
-  getIndex = (id) => {
-    const index = this.products.findindex((prod) => prod.id === parseInt(id));
-    return index;
+  modProduct = (id, code, description, stock) => {
+    // const{ code, description, stock}=params
+    return ProductModel.updateOne(
+      { _id: id },
+      { description, stock, status: true }
+    );
   };
 
   getProducts = (limit = 0, bDel = false) => {
-    if (!bDel)
-      return this.products.filter((product) => product.status === true);
-    return this.products;
+    if (limit == 0) {
+      if (!bDel) return ProductModel.find({ status: true }).lean();
+      return ProductModel.find({}).lean();
+    } else if (limit > 0) {
+      if (!bDel) return ProductModel.find({ status: true }).limit(limit).lean();
+      return ProductModel.find({}).limit(limit).lean();
+    }
   };
 
-  getProductById = (id, bExists = false) => {
-    const res = this.products.find((product) => product.id === parseInt(id));
-    if (!res) {
-      return false;
-    }
-    if (!bExists) return res;
-    return true;
+  getProductById = (id) => {
+    return ProductModel.find({ _id: id }).lean();
+  };
+  getProductByCode = (code) => {
+    return ProductModel.find({ code: code }).lean();
   };
 }
 const PM = new ProductMannager();
-module.exports = PM;
+export default PM;
