@@ -1,7 +1,7 @@
 import express from "express";
 // import PM from "../Dao/index.js";
 import PM from "../Dao/ProductManager.js";
-import ProductModel from "../models/product.model.js";
+// import ProductModel from "../models/product.model.js";
 const router = express.Router();
 let prodList = [];
 router.get("/", async (req, res) => {
@@ -16,7 +16,10 @@ router.get("/", async (req, res) => {
     });
   }
 });
-
+router.get("/chat", (req, res) => {
+  const prodList = PM.getProducts(true);
+  res.render("chat", { prodList, style: "chat.css" });
+});
 // router.get("/realtimeProducts", (req, res) => {
 //   const prodList = PM.getProducts(true);
 //   res.render("realtimeProducts", { prodList, style: "realtimeProducts.css" });
