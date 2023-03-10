@@ -1,26 +1,13 @@
 import ProductModel from "../models/product.model.js";
 class ProductMannager {
   constructor() {
-    // this.products = [];
+    this.products = [];
   }
 
-  addProduct = (
-    title,
-    description,
-    code,
-    price,
-    stock,
-    category,
-    thumbnails
-  ) => {
-    // const{ title,
-    //   description,
-    //   code,
-    //   price,
-    //   stock,
-    //   category,
-    //   thumbnails}=params
-    return ProductModel.create({
+  addProduct = async (params) => {
+    const { title, description, code, price, stock, category, thumbnails } =
+      params;
+    return await ProductModel.create({
       title,
       description,
       code,
@@ -31,34 +18,44 @@ class ProductMannager {
     });
   };
 
-  delProduct = (id) => {
-    return ProductModel.updateOne({ _id: id }, { status: false });
+  delProduct = async (id) => {
+    return await ProductModel.updateOne({ _id: id }, { status: false });
   };
 
-  modProduct = (id, code, description, stock) => {
+  modProduct = async (id, code, description, stock) => {
     // const{ code, description, stock}=params
-    return ProductModel.updateOne(
+    return await ProductModel.updateOne(
       { _id: id },
       { description, stock, status: true }
     );
   };
 
-  getProducts = (limit = 0, bDel = false) => {
-    if (limit == 0) {
-      if (!bDel) return ProductModel.find({ status: true }).lean();
-      return ProductModel.find({}).lean();
-    } else if (limit > 0) {
-      if (!bDel) return ProductModel.find({ status: true }).limit(limit).lean();
-      return ProductModel.find({}).limit(limit).lean();
+  getProducts = async (params) => {
+    let { limit, page, query, sort } = params;
+    console.log(params);
+    limit = !limit ? 10 : limit;
+    page = !page ? 1 : page;
+    query = !query ? "status:true" : "status:true," + query;
+    sort = !sort ? "" : sort;
+    try {
+      const res = await ProductModel.paginate(
+        { query },
+        { limit: limit, page: page, sort: { sort }, lean: true }
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      return [];
     }
   };
 
-  getProductById = (id) => {
-    return ProductModel.find({ _id: id }).lean();
+  getProductById = async (id) => {
+    return await ProductModel.find({ _id: id }).lean();
   };
-  getProductByCode = (code) => {
-    return ProductModel.find({ code: code }).lean();
+  getProductByCode = async (code) => {
+    return await ProductModel.find({ code: code }).lean();
   };
 }
+
 const PM = new ProductMannager();
 export default PM;

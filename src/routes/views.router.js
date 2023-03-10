@@ -6,8 +6,8 @@ const router = express.Router();
 let prodList = [];
 router.get("/", async (req, res) => {
   try {
-    prodList = await PM.getProducts();
-    console.log(prodList);
+    prodList = await PM.getProducts(req.query);
+    // console.log(prodList);
     res.render("home", { prodList, style: "home.css" });
   } catch (error) {
     console.log(error);

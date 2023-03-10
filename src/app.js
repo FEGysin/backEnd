@@ -6,6 +6,7 @@ import useRouter from "./routes/routes.js";
 import dotenv from "dotenv";
 import __dirname from "./dirname.js";
 import msgManager from "./Dao/msgMannager.js";
+import MsgManager from "./Dao/msgMannager.js";
 dotenv.config();
 const app = express();
 const PORT = 8080 || process.env.PORT;
@@ -25,7 +26,11 @@ app.use(urlencoded({ extended: true }));
 app.use("/virtual", express.static(__dirname + "/public"));
 app.use(useRouter);
 
-const chatMessages = [];
+const chatMessages = async () => {
+  try {
+    await MsgManager.getMgs();
+  } catch (error) {}
+};
 let connectedClients = [];
 io.on("connection", (socket) => {
   connectedClients.push(socket);
@@ -46,6 +51,7 @@ io.on("connection", (socket) => {
     chatMessages.push(data);
     io.emit("msgLog", chatMessages);
   });
+
   io.on("disconnect", () => {
     connectedClients = connectedClients.filter((client) => client !== socket);
   });

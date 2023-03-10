@@ -7,7 +7,7 @@ const MsgSchema = new Schema({
     index: true,
   },
   message: {
-    type: string,
+    type: String,
   },
 });
 const MsgModel = model(collection, MsgSchema);
