@@ -2,7 +2,6 @@ import CartModel from "../models/cart.model.js";
 class CartMannager {
   constructor() {}
   addCart = async (params) => {
-    // console.log(params);
     let { userId, cartId, products, cartTotal } = params;
     userId = !userId ? 1 : userId;
     cartId = !cartId ? 1 : cartId;
@@ -15,61 +14,57 @@ class CartMannager {
   };
   modCart = async (params) => {
     let { uId, cId, pId, prodId, cartTotal, code, price, quantity } = params;
-    // console.log(code);
     uId = !uId ? 1 : uId;
     cartTotal = !cartTotal ? price : cartTotal;
     cId = !cId ? 1 : cId;
     quantity = !quantity ? 1 : quantity;
-    // console.log(price);
-    // let products = [];
-    // let product = { prodId, code, quantity: 0 };
-    // products.push(product);
-    // const nWreg = Object.assign({}, { products }, params);
-    // const nwCart = await this.addCart(nWreg);
 
-    const result = await CartModel.updateOne(
-      { userId: uId, cartId: cId },
-      {
-        $inc: {
-          // cartTotal: price * quantity,
-          "products.$[elm].quantity": quantity,
-        },
-      },
-      {
-        arrayFilters: [{ "elm.code": code }],
-      }
-    );
-    if (result.modifiedCount > 0) {
-      await CartModel.updateOne(
+    if (!CartModel.exists({ userId: uId, cartId: cId })) {
+      let products = [];
+      let product = { prodId, code, quantity };
+      products.push(product);
+      const nWreg = Object.assign({}, { products }, params);
+    } else {
+      const result = await CartModel.updateOne(
         { userId: uId, cartId: cId },
         {
           $inc: {
-            cartTotal: price * quantity,
+            "products.$[elm].quantity": quantity,
           },
         },
         {
           arrayFilters: [{ "elm.code": code }],
         }
       );
-    } else {
-      await CartModel.updateOne(
-        { userId: uId, cartId: cId },
-        {
-          $inc: {
-            cartTotal: price * quantity,
-          },
-          $addToSet: {
-            products: {
-              prodId: prodId,
-              code: code,
-              quantity: quantity,
+      if (result.modifiedCount > 0) {
+        await CartModel.updateOne(
+          { userId: uId, cartId: cId },
+          {
+            $inc: {
+              cartTotal: price * quantity,
+            },
+          }
+        );
+      } else {
+        await CartModel.updateOne(
+          { userId: uId, cartId: cId },
+          {
+            $inc: {
+              cartTotal: price * quantity,
+            },
+            $addToSet: {
+              products: {
+                prodId: prodId,
+                code: code,
+                quantity: quantity,
+              },
             },
           },
-        },
-        {
-          arrayFilters: [{ "elm.code": code }],
-        }
-      );
+          {
+            arrayFilters: [{ "elm.code": code }],
+          }
+        );
+      }
     }
     return await CartModel.find({ userId: uId, cartId: cId }).lean();
   };
