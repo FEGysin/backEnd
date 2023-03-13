@@ -45,15 +45,21 @@ router.get("/:cId", (req, res) => {
 
 router.post("/:cId/products/:pId", async (req, res) => {
   const { cId, pId } = req.params;
-  //console.log(cId, pId);
-  if (!cId || !pId)
+
+  if (!cId || !pId) {
     return res
       .status(400)
       .send({ message: "Faltan Parametos en la Solicitud" });
+  }
+
   try {
-    await CartManager.addCart(req.body);
+    // await CartManager.addCart(req.body);
+    req.body = Object.assign({}, { cId }, { pId }, req.body);
+    await CartManager.modCart(req.body);
     return res.status(200).send("Carrito Modificado");
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   // const Prod = req.body;
   // const cartIndex = Carts.findIndex((cart) => cart.id === parseInt(cId));
   // if (!cartIndex) {

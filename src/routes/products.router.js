@@ -4,8 +4,10 @@ const router = Router();
 const Products = [];
 
 router.get("/", async (req, res) => {
+  // console.log(req.params);
   try {
-    const prodList = await PM.getProducts(req.params);
+    const prodList = await PM.getProducts(req.query);
+    console.log(prodList);
     res.render("products", { prodList, style: "products.css" });
   } catch (error) {
     console.log(error);

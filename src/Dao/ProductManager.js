@@ -32,7 +32,7 @@ class ProductMannager {
 
   getProducts = async (params) => {
     let { limit, page, query, sort } = params;
-    console.log(params);
+    // console.log(params);
     limit = !limit ? 10 : limit;
     page = !page ? 1 : page;
     query = !query ? "status:true" : "status:true," + query;
