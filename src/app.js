@@ -2,7 +2,7 @@ import express, { urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import handlebars from "express-handlebars";
 import logger from "morgan";
-import mongoCfgObject from "./config/mongoDbConn.js";
+import { mongoCfgObject } from "./config/mongoDbConn.js";
 import session from "express-session";
 import dotenv from "dotenv";
 dotenv.config();

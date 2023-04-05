@@ -1,13 +1,14 @@
 import MongoStore from "connect-mongo";
-import { connect } from "mongoose";
+import { connect, set } from "mongoose";
 const url =
   "mongodb+srv://fegysin:Atlas2903db@cluster0.nx5ys0f.mongodb.net/ecommerce?retryWrites=true&w=majority";
 //"mongodb://localhost:27017/ecommerce";
 let mongoCfgObject = {
   dbConnection: async () => {
+    set("strictQuery", set);
     try {
       console.log("Conecting to " + url);
-      await connect(url);
+      await connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
       console.log("DB Connexion Ok");
     } catch (error) {
       console.log(error);
@@ -30,4 +31,4 @@ let mongoCfgObject = {
 };
 
 // module.exports = { startConnection };
-module.exports = { mongoCfgObject };
+export { mongoCfgObject };

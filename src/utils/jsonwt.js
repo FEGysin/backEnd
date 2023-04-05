@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-const PRIVATE_KEY = "";
+const PRIVATE_KEY = "H0l4T4r10l4";
 const generateToken = (user) => {
   const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: "24h" });
   return token;
@@ -22,7 +22,4 @@ const authToken = (req, res, next) => {
   });
 };
 
-module.exports = {
-  generateToken,
-  authToken,
-};
+export { generateToken, authToken };

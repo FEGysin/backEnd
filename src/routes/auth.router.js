@@ -1,9 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
-import UserModel from "../models/user.model";
-import generateToken from "../utils/jsonwt.js";
-import { createHash, isPwdValid } from "../utils/bCrypt.js";
-
+import UserModel from "../models/user.model.js";
+import { generateToken } from "../utils/jsonwt.js";
+import { isValidPassword, createHash } from "../utils/bCrypt.js";
 const router = Router();
 router.get("/login", async (req, res) => {
   res.status(200).render("login");
@@ -19,7 +18,7 @@ router.post("/login", async (req, res) => {
       .status(401)
       .send({ status: "error", error: "Usuario inexistente" });
 
-  if (!isPwdValid(user, password))
+  if (!isValidPassword(user, password))
     return res
       .status(401)
       .send({ status: "error", error: "Usuario Password Invalido" });
@@ -27,11 +26,22 @@ router.post("/login", async (req, res) => {
   //   name: `${user.firstName} ${user.lastName}`,
   //   eMail: user.eMail,
   // };
-  const access_token = generateToken(user);
+  // const access_token = generateToken(user);
   res
     .status(200)
-    .send({ status: "success", access_token, message: "LogIn Correcto" })
+    //.send({ status: "success", access_token, message: "LogIn Correcto" });
     .redirect("/api/products");
+});
+
+router.get("/api/sessions/current", (req, res) => {
+  console.log(req.params);
+  // const user = await UserModel.findOne({ eMail });
+  // const access_token = generateToken(user);
+  // res.send({
+  // status: "success",
+  // access_token,
+  // message: "Usuario Actual",
+  //  })
 });
 
 router.get(
@@ -53,15 +63,22 @@ router.get("/register", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { firstName, lastName, eMail, password } = req.body;
+  const { firstName, lastName, eMail, age, password } = req.body;
 
   let exists = await UserModel.exists({ eMail });
   if (exists)
     return res
       .status(401)
       .send({ status: "error", error: "User Registered in DataBase" });
-  const user = { firstName, lastName, eMail, password: createHash(password) };
+  const user = {
+    firstName,
+    lastName,
+    eMail,
+    age,
+    password: createHash(password),
+  };
   await UserModel.create(user);
+
   const access_token = generateToken(user);
   res.status(200).json({
     status: "success",

@@ -45,6 +45,4 @@ function initializePassport() {
   });
 }
 
-module.exports = {
-  initializePassport,
-};
+export { initializePassport };
