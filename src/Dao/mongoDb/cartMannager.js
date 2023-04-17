@@ -1,4 +1,4 @@
-import CartModel from "../models/cart.model.js";
+import CartModel from "./mongoDb/models/cart.model.js";
 class CartMannager {
   constructor() {}
   addCart = async (params) => {

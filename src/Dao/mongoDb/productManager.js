@@ -1,4 +1,4 @@
-import ProductModel from "../models/product.model.js";
+import ProductModel from "./mongoDb/models/product.model.js";
 class ProductMannager {
   constructor() {
     this.products = [];
