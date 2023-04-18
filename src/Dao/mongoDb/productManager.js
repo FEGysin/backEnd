@@ -52,10 +52,11 @@ class ProductMannager {
   getProductById = async (id) => {
     return await ProductModel.find({ _id: id }).lean();
   };
+
   getProductByCode = async (code) => {
     return await ProductModel.find({ code: code }).lean();
   };
 }
 
-const PM = new ProductMannager();
-export default PM;
+// const PM = new ProductMannager();
+// export default PM;

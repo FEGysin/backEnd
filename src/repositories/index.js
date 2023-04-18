@@ -9,4 +9,4 @@ const userService = new UserRepositories(new UserDao());
 const productService = new ProductRepositories(new ProductDao());
 const cartService = new CartRepositories(new CartDao());
 
-export { userService, productService };
+export { userService, productService, cartService };

@@ -81,5 +81,5 @@ class CartMannager {
     return await CartModel.find({ _id: cId }).lean();
   };
 }
-const CartManager = new CartMannager();
-export default CartManager;
+// const CartManager = new CartMannager();
+// export default CartManager;

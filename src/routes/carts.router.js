@@ -1,4 +1,3 @@
-import fs from "fs";
 import { Router } from "express";
 import CartManager from "../Dao/cartMannager.js";
 // const path = "./src/data";
