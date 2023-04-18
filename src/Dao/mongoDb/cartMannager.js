@@ -1,7 +1,8 @@
 import CartModel from "./mongoDb/models/cart.model.js";
 class CartMannager {
   constructor() {}
-  addCart = async (params) => {
+
+  createCart = async (params) => {
     let { userId, cartId, products, cartTotal } = params;
     userId = !userId ? 1 : userId;
     cartId = !cartId ? 1 : cartId;
@@ -12,7 +13,8 @@ class CartMannager {
       cartTotal,
     });
   };
-  modCart = async (params) => {
+
+  updateCart = async (params) => {
     let { uId, cId, pId, prodId, cartTotal, code, price, quantity } = params;
     uId = !uId ? 1 : uId;
     cartTotal = !cartTotal ? price : cartTotal;
@@ -68,10 +70,11 @@ class CartMannager {
     }
     return await CartModel.find({ userId: uId, cartId: cId }).lean();
   };
-  delCart = async (params) => {
+
+  deleteCart = async (params) => {
     const { cId } = params;
     await CartModel.deleteOne({ _id: cId });
-    return await CartModel.find({ _id: cId }).lean();
+    //return await CartModel.find({ _id: cId }).lean();
   };
   getCarts = async (params) => {
     return await CartModel.find({}).lean();
