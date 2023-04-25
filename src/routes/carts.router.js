@@ -42,7 +42,7 @@ const router = Router();
 router
   .get("/", getCarts)
   .get("/:cId", getCartById)
-  .post("/:cId/products/:pId", createCart)
+  .post("/products/:pId", createCart)
   .put("/:cId/products/:pId", updateCart)
   .delete("/:cId", deleteCart);
 

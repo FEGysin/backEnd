@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
-import UserModel from "../Dao/mongoDb/models/user.model.js";
+// import UserModel from "../Dao/mongoDb/models/user.model.js";
+import { userService } from "../repositories/index.js";
 import { generateToken } from "../utils/jsonwt.js";
 import { isValidPassword, createHash } from "../utils/bCrypt.js";
 const router = Router();
@@ -11,7 +12,7 @@ router.get("/login", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { eMail, password } = req.body;
 
-  const user = await UserModel.findOne({ eMail });
+  const user = await userService.g({ eMail });
 
   if (!user)
     return res
@@ -22,12 +23,15 @@ router.post("/login", async (req, res) => {
     return res
       .status(401)
       .send({ status: "error", error: "Usuario Password Invalido" });
+
   // req.session.user = {
   //   name: `${user.firstName} ${user.lastName}`,
   //   eMail: user.eMail,
   // };
-  // const access_token = generateToken(user);
+  const { password: pass, ...rest } = user;
+  const token = generateToken(rest);
   res
+    .cookie("coderCookieToken", token, { maxAge: 60 * 60 * 1000 })
     .status(200)
     //.send({ status: "success", access_token, message: "LogIn Correcto" });
     .redirect("/api/products");

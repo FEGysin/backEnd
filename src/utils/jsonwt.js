@@ -10,16 +10,16 @@ const authToken = (req, res, next) => {
   if (!authHeader) {
     return res.status(401).json({ status: "error", error: "not Autenticated" });
   }
-  const token = authHeader.slipt(" ")[1];
-  jwt.verify(token, PRIVATE_KEY, (error, Credential) => {
+  const token = authHeader.split(" ")[1];
+  jwt.verify(token, PRIVATE_KEY, (error, credential) => {
     if (error) {
       return res
         .status(403)
         .json({ status: "error", error: "not Autenticated" });
     }
-    req.user = Credential.user;
+    req.user = credential.user;
     next();
   });
 };
 
-export { generateToken, authToken };
+export { generateToken, authToken, PRIVATE_KEY };

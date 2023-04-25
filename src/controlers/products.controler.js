@@ -1,5 +1,5 @@
 import { productService } from "../repositories";
-class ProductClass {
+export class ProductClass {
   getProducts = async (req, res) => {
     try {
       const prodList = await productService.getProducts(req.query);
@@ -20,7 +20,17 @@ class ProductClass {
       res.status(400).send("Producto invalido o inexistente");
     }
   }; //Get Product Info
-
+  getProductByCode = async (req, res) => {
+    const { pCode } = req.params;
+    try {
+      const product = productService.getProductByCode(pCode);
+      if (!product) res.status(400).send("Producto invalido o inexistente");
+      res.json(product);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("Producto invalido o inexistente");
+    }
+  };
   createProduct = async (req, res) => {
     const { description, code, price, category } = req.body;
     if (!description || !code || !price || !category)
@@ -51,8 +61,9 @@ class ProductClass {
           !product.stock ? " Stock Disponible" : ""
         }`,
       });
+      req.body = Object.assign({}, { pId }, req.body);
       try {
-        await productService.modProduct(pId, code, description, stock);
+        await productService.modProduct(req.body);
         res.status(200).send({ message: "Producto Actualizado Correctamente" });
       } catch (error) {
         res
@@ -75,4 +86,4 @@ class ProductClass {
     }
   };
 }
-export const ProductClass = new ProductClass();
+// export const ProductClass = new ProductClass();

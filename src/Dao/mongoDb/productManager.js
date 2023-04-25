@@ -1,60 +1,51 @@
+import { query } from "express";
 import ProductModel from "./mongoDb/models/product.model.js";
-class ProductMannager {
+export class ProductMannager {
   constructor() {
     this.products = [];
   }
-
-  addProduct = async (params) => {
-    const { title, description, code, price, stock, category, thumbnails } =
-      params;
-    return await ProductModel.create({
-      title,
-      description,
-      code,
-      price,
-      stock,
-      category,
-      thumbnails,
-    });
+  getProducts = async (objQuery) => {
+    const { filter, options } = objQuery;
+    // try {
+    return await ProductModel.paginate(
+      filter,
+      options
+      // { query },
+      // { limit: limit, page: page, sort: { sort }, lean: true }
+    );
+    // return res;
+    // } catch (error) {
+    //   console.log(error);
+    //   return [];
+    // }
   };
 
-  delProduct = async (id) => {
-    return await ProductModel.updateOne({ _id: id }, { status: false });
+  getProductById = async (id) => await ProductModel.find({ _id: id }).lean();
+
+  getProductByCode = async (pCode) =>
+    await ProductModel.find({ code: pCode }).lean();
+
+  addProduct = async (product) => {
+    // const { title, description, code, price, stock, category, thumbnails } =
+    //   params;
+    return await ProductModel.create({ product });
   };
 
-  modProduct = async (id, code, description, stock) => {
-    // const{ code, description, stock}=params
+  updateProduct = async (updObject) => {
+    // (id, code, description, stock)
+    const { filter, query, options } = updObject;
+
     return await ProductModel.updateOne(
-      { _id: id },
-      { description, stock, status: true }
+      // { _id: id },
+      // { description, stock, status: true }
+      filter,
+      query,
+      options
     );
   };
 
-  getProducts = async (params) => {
-    let { limit, page, query, sort } = params;
-    // console.log(params);
-    limit = !limit ? 10 : limit;
-    page = !page ? 1 : page;
-    query = !query ? "status:true" : "status:true," + query;
-    sort = !sort ? "" : sort;
-    try {
-      const res = await ProductModel.paginate(
-        { query },
-        { limit: limit, page: page, sort: { sort }, lean: true }
-      );
-      return res;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  };
-
-  getProductById = async (id) => {
-    return await ProductModel.find({ _id: id }).lean();
-  };
-
-  getProductByCode = async (code) => {
-    return await ProductModel.find({ code: code }).lean();
+  delProduct = async (pId) => {
+    return await ProductModel.updateOne({ _id: pId }, { status: false });
   };
 }
 
