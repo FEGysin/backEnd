@@ -9,7 +9,7 @@ import cors from "cors";
 import { CfgObject } from "./config/config.js";
 
 import { Server } from "socket.io";
-import { HttpServer } from "http";
+import HttpServer from "http";
 import { initProductChatIo } from "./utils/productChatIo.js";
 import useRouter from "./routes/routes.js";
 import __dirname from "./dirname.js";
@@ -18,7 +18,7 @@ import { initializePassport } from "./middleware/initialPassport.js";
 import passport from "passport";
 
 const app = express();
-const httpServer = new HttpServer(app);
+const httpServer = new HttpServer.Server(app);
 const io = new Server(httpServer);
 CfgObject.dbConnection();
 

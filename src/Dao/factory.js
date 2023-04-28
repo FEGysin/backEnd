@@ -1,39 +1,34 @@
-import CartManager from './mongoDb/cartMannager.js'
-import {persistence, dbConnection} from ('../config/config.js')
+import { CfgObject } from "../config/config.js";
+import { ProductMannager } from "./mongoDb/productManager.js";
+import { UserMannager } from "./mongoDb/userMannager.js";
+import { CartMannager } from "./mongoDb/cartMannager.js";
 
-let ProductDao
-let UserDao
-let CartDao
+let ProductDao;
+let UserDao;
+let CartDao;
 
-switch (persistence) {
-    case 'MONGO':
-        dbConnection()
-        const ProductMannager = require('./mongoDb/productManager.js')
-        ProductDao = ProductMannager
+switch (CfgObject.persistence) {
+  case "MONGO":
+    dbConnection();
+    ProductDao = new ProductMannager();
+    UserDao = new UserMannager();
+    CartDao = new CartMannager();
 
-        const UserMannager = require('./mongoDb/userMannager.js')
-        UserDao = UserMannager
+    break;
+  case "MEMORY":
+    // const UserDaoMemory = require('./memory/user.memory.js')
+    // UserDao = UserDaoMemory
 
-        const CartMannager =require('./mongoDb/cartMannager.js')
-        CartDao=CartMannager
+    break;
+  case "FILESYSTEM":
+    break;
 
-        break;
-    case 'MEMORY':
-
-        // const UserDaoMemory = require('./memory/user.memory.js')
-        // UserDao = UserDaoMemory
-
-        break;
-    case 'FILESYSTEM':
-        
-        break;
-
-    default:
-        break;
+  default:
+    break;
 }
 
 module.exports = {
-    ProductDao,
-    UserDao,
-    CartDao
-}
+  ProductDao,
+  UserDao,
+  CartDao,
+};

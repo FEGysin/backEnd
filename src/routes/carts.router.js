@@ -1,11 +1,6 @@
 import { Router } from "express";
-import {
-  getCarts,
-  getCartById,
-  createCart,
-  updateCart,
-  deleteCart,
-} from "../controlers/cart.controler";
+import { CartClass } from "../controlers/cart.controler.js";
+import { auth } from "../middleware/auth.js";
 //import CartManager from "../Dao/cartMannager.js";
 const router = Router();
 // const Carts = []; //id=0, products=[]
@@ -40,11 +35,11 @@ const router = Router();
 //   }
 // };
 router
-  .get("/", getCarts)
+  .get("/", CartClass.g)
   .get("/:cId", getCartById)
-  .post("/products/:pId", createCart)
-  .put("/:cId/products/:pId", updateCart)
-  .delete("/:cId", deleteCart);
+  .post("/products/:pId", auth("user"), createCart)
+  .put("/:cId/products/:pId", auth("user"), updateCart)
+  .delete("/:cId", auth("user"), deleteCart);
 
 // router.get("/:cId", (req, res) => {
 //   const { cId } = req.params;

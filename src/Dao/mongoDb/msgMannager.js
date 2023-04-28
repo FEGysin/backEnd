@@ -1,4 +1,5 @@
-import MsgModel from "../models/message.model.js";
+import MsgModel from "./models/message.model.js";
+
 class MsgMannager {
   constructor() {
     this.messages = [];

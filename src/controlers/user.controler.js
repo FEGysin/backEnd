@@ -1,1 +1,1 @@
-import { userService } from "../repositories";
+import { userService } from "../repositories/index.js";

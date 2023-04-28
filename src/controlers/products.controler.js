@@ -1,5 +1,5 @@
-import { productService } from "../repositories";
-export class ProductClass {
+import { productService } from "../repositories/index.js";
+class ProductClass {
   getProducts = async (req, res) => {
     try {
       const prodList = await productService.getProducts(req.query);
@@ -86,4 +86,4 @@ export class ProductClass {
     }
   };
 }
-// export const ProductClass = new ProductClass();
+export default ProductClass;

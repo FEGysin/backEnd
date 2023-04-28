@@ -1,6 +1,6 @@
-import { cartService } from "../repositories";
+import { cartService } from "../repositories/index.js";
 
-class CartClass {
+export class CartClass {
   getCarts = async (req, res) => {
     const carts = cartService.getCarts();
     if (!carts)
@@ -82,4 +82,4 @@ class CartClass {
   };
 }
 
-export const CartClass = new CartClass();
+// export const CartClass = new CartClass();

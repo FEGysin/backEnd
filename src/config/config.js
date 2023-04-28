@@ -1,8 +1,8 @@
 import MongoStore from "connect-mongo";
 // import { connect, set } from "mongoose";
-import { dotenv } from "dotenv";
-import { commander } from "../utils/commander";
-import { MongoSingleton } from "./mongoSingleton";
+import dotenv from "dotenv";
+import { commander } from "../utils/commander.js";
+import { MongoSingleton } from "./mongoSingleton.js";
 
 const { mode } = commander.opts();
 
@@ -21,7 +21,7 @@ let CfgObject = {
   adminName: process.env.ADMIN_NAME || "admin",
   adminPassword: process.env.ADMIN_PASSWORD || "admin",
   persistence: process.env.PERSISTENCE,
-  dbConnection: () => MongoSingleton.getInstance(),
+  dbConnection: () => MongoSingleton.getInstance(url),
   session: {
     store: MongoStore.create({
       mongoUrl: url,

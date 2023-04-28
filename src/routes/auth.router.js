@@ -12,7 +12,7 @@ router.get("/login", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { eMail, password } = req.body;
 
-  const user = await userService.g({ eMail });
+  const user = await userService.get({ eMail });
 
   if (!user)
     return res

@@ -1,4 +1,4 @@
-import CartModel from "./mongoDb/models/cart.model.js";
+import CartModel from "./models/cart.model";
 export class CartMannager {
   constructor() {}
   createCart = async (cart) => await CartModel.create(cart);
@@ -16,7 +16,7 @@ export class CartMannager {
 
   getCartbyId = async (cId) => await CartModel.find({ _id: cId }).lean();
 
-  getCartbyUid = async (cId) => await CartModel.find({ UserId: uId }).lean();
+  getCartbyUid = async (uId) => await CartModel.find({ UserId: uId }).lean();
 
   cartExists = async (uId, cId) =>
     await CartModel.exists({ userId: uId, cartId: cId });

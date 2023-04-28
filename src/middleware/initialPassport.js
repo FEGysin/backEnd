@@ -1,6 +1,6 @@
 import passport from "passport";
 import GithubStrategy from "passport-github2";
-import UserModel from "../models/user.model.js";
+import UserModel from "../Dao/mongoDb/models/user.model.js";
 
 function initializePassport() {
   passport.use(

@@ -1,18 +1,12 @@
 import { Router } from "express";
-import {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} from "../controlers/products.controler";
+import ProductClass from "../controlers/products.controler.js";
 const router = Router();
 
-router.get("/", getProducts);
+router.get("/", ProductClass);
 router.get("/:pId", getProductById);
-router.post("/", createProduct);
-router.put("/:pId", updateProduct);
-router.delete("/:pId", deleteProduct);
+router.post("/", auth("user"), createProduct);
+router.put("/:pId", auth("user"), updateProduct);
+router.delete("/:pId", auth("user"), deleteProduct);
 
 // router.get("/", async (req, res) => {
 //   // console.log(req.params);

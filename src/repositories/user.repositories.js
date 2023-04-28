@@ -3,7 +3,6 @@ export class UserRepositories {
     this.userDao = userDao;
   }
   addUser = async (user) => {};
-  getUsers = async () => await this.userDao.find({});
-
-  getUser = async (eMail) => await this.userDao.find({ eMail });
+  getUsers = async () => await this.userDao.getUsers();
+  getUser = async (eMail) => await this.userDao.getUser(eMail);
 }

@@ -1,6 +1,6 @@
-import MsgManager from "./Dao/msgMannager.js";
+import MsgManager from "../Dao/mongoDb/msgMannager.js";
 
-initProductChatIo = (io) => {
+const initProductChatIo = (io) => {
   const chatMessages = async () => {
     try {
       await MsgManager.getMgs();

@@ -3,8 +3,8 @@ export class CartRepositories {
     this.cartDao = cartDao;
   }
   createCart = async (uId, pId) => {
-    let { uId, products, cartTotal } = cart;
-    userId = !userId ? 1 : userId;
+    let { products, cartTotal } = cart;
+    userId = !uId ? 1 : uId;
 
     return await cartDao.create({
       userId,
@@ -14,7 +14,7 @@ export class CartRepositories {
   };
 
   updateCart = async (params) => {
-    let { uId, cId, pId, prodId, cartTotal, code, price, quantity } = params;
+    let { uId, cId, prodId, cartTotal, code, price, quantity } = params;
 
     uId = !uId ? 1 : uId;
     cartTotal = !cartTotal ? price : cartTotal;

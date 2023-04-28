@@ -1,5 +1,5 @@
 import { query } from "express";
-import ProductModel from "./mongoDb/models/product.model.js";
+import ProductModel from "./models/product.model.js";
 export class ProductMannager {
   constructor() {
     this.products = [];
