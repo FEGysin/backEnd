@@ -9,8 +9,12 @@ const { mode } = commander.opts();
 const enviroment = mode || "developement";
 dotenv.config({
   path:
-    enviroment === "developement" ? "./env.developement" : "./env.production",
+    enviroment === "developement"
+      ? "../.env.developement"
+      : "../.env.production",
 });
+// console.log(`Enviroment
+// ${process.env.PERSISTENCE}`);
 const url =
   process.env.MONGO_URL ||
   "mongodb+srv://fegysin:Atlas2903db@cluster0.nx5ys0f.mongodb.net/ecommerce?retryWrites=true&w=majority";
@@ -20,6 +24,7 @@ let CfgObject = {
   MONGO_URL: url,
   adminName: process.env.ADMIN_NAME || "admin",
   adminPassword: process.env.ADMIN_PASSWORD || "admin",
+
   persistence: process.env.PERSISTENCE,
   dbConnection: () => MongoSingleton.getInstance(url),
   session: {

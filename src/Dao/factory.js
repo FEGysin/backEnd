@@ -6,14 +6,13 @@ import { CartMannager } from "./mongoDb/cartMannager.js";
 let ProductDao;
 let UserDao;
 let CartDao;
-
+console.log(`Persistence : ${CfgObject.persistence}`);
 switch (CfgObject.persistence) {
   case "MONGO":
-    dbConnection();
-    ProductDao = new ProductMannager();
-    UserDao = new UserMannager();
-    CartDao = new CartMannager();
-
+    CfgObject.dbConnection();
+    ProductDao = ProductMannager;
+    UserDao = UserMannager;
+    CartDao = CartMannager;
     break;
   case "MEMORY":
     // const UserDaoMemory = require('./memory/user.memory.js')
@@ -27,8 +26,4 @@ switch (CfgObject.persistence) {
     break;
 }
 
-module.exports = {
-  ProductDao,
-  UserDao,
-  CartDao,
-};
+export { ProductDao, UserDao, CartDao };

@@ -1,4 +1,4 @@
-import CartModel from "./models/cart.model";
+import CartModel from "./models/cart.model.js";
 export class CartMannager {
   constructor() {}
   createCart = async (cart) => await CartModel.create(cart);

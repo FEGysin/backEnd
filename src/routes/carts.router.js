@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { CartClass } from "../controlers/cart.controler.js";
+const cartClass = new CartClass();
 import { auth } from "../middleware/auth.js";
 //import CartManager from "../Dao/cartMannager.js";
 const router = Router();
@@ -35,11 +36,11 @@ const router = Router();
 //   }
 // };
 router
-  .get("/", CartClass.g)
-  .get("/:cId", getCartById)
-  .post("/products/:pId", auth("user"), createCart)
-  .put("/:cId/products/:pId", auth("user"), updateCart)
-  .delete("/:cId", auth("user"), deleteCart);
+  .get("/", cartClass.getCarts)
+  .get("/:cId", cartClass.getCartById)
+  .post("/products/:pId", auth("user"), cartClass.createCart)
+  .put("/:cId/products/:pId", auth("user"), cartClass.updateCart)
+  .delete("/:cId", auth("user"), cartClass.deleteCart);
 
 // router.get("/:cId", (req, res) => {
 //   const { cId } = req.params;
@@ -87,4 +88,4 @@ router
 // SaveData();
 //}); //Agregar - Modificar Producto
 
-export { router };
+export default { router };

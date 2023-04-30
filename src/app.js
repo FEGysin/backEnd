@@ -1,4 +1,4 @@
-import CfgObject from "./config/config.js";
+import { CfgObject } from "./config/config.js";
 import { httpServer } from "./server.js";
 const PORT = CfgObject.PORT;
 httpServer.listen(PORT, (err) => {

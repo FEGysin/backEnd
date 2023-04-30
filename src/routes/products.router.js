@@ -1,12 +1,14 @@
 import { Router } from "express";
-import ProductClass from "../controlers/products.controler.js";
+import { ProductClass } from "../controlers/products.controler.js";
+import { auth } from "../middleware/auth.js";
+const productClass = new ProductClass();
 const router = Router();
-
-router.get("/", ProductClass);
-router.get("/:pId", getProductById);
-router.post("/", auth("user"), createProduct);
-router.put("/:pId", auth("user"), updateProduct);
-router.delete("/:pId", auth("user"), deleteProduct);
+router.get("/", productClass.getProducts);
+router.get("/:pId", productClass.getProductbyId);
+router.get("/:code", productClass.getProductByCode);
+router.post("/", auth("user"), productClass.createProduct);
+router.put("/:pId", auth("user"), productClass.updateProduct);
+router.delete("/:pId", auth("user"), productClass.deleteProduct);
 
 // router.get("/", async (req, res) => {
 //   // console.log(req.params);
