@@ -5,6 +5,7 @@ export class ProductMannager {
     this.products = [];
   }
   getProducts = async (objQuery) => {
+    // console.log(objQuery);
     const { filter, options } = objQuery;
     // try {
     return await ProductModel.paginate(
@@ -20,11 +21,12 @@ export class ProductMannager {
     // }
   };
 
-  getProductById = async (id) => await ProductModel.find({ _id: id }).lean();
-
-  getProductByCode = async (pCode) =>
+  getProductById = async (id) => {
+    return await ProductModel.find({ _id: id }).lean();
+  };
+  getProductByCode = async (pCode) => {
     await ProductModel.find({ code: pCode }).lean();
-
+  };
   addProduct = async (product) => {
     // const { title, description, code, price, stock, category, thumbnails } =
     //   params;

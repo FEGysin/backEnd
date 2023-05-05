@@ -1,11 +1,11 @@
-import { userService } from "../repositories/index.js";
+import { userService } from "../services/index.js";
 import { generateToken } from "../utils/jsonwt.js";
 import { isValidPassword, createHash } from "../utils/bCrypt.js";
 
 export class AuthClass {
   LogIn = async (req, res) => {
     const { eMail, password } = req.body;
-    const user = await userService.get(eMail);
+    const user = await userService.getUser(eMail);
     if (!user)
       return res
         .status(401)

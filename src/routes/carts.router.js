@@ -38,6 +38,7 @@ const router = Router();
 router
   .get("/", cartClass.getCarts)
   .get("/:cId", cartClass.getCartById)
+  .get(":cId/purchase", cartClass.buyCart)
   .post("/products/:pId", auth("user"), cartClass.createCart)
   .put("/:cId/products/:pId", auth("user"), cartClass.updateCart)
   .delete("/:cId", auth("user"), cartClass.deleteCart);
@@ -88,4 +89,4 @@ router
 // SaveData();
 //}); //Agregar - Modificar Producto
 
-export default { router };
+export default router;

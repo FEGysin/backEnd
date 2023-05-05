@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userService } from "../repositories/index.js";
+import { userService } from "../services/index.js";
 const router = Router();
 router.get("/:uId", (req, res) => {});
 router.get("/current", (req, res) => {

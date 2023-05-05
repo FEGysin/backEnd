@@ -1,11 +1,14 @@
 import { Router } from "express";
 import { ProductClass } from "../controlers/products.controler.js";
 import { auth } from "../middleware/auth.js";
+import { generateMockProducts } from "../mocking/products.mock.js";
+
 const productClass = new ProductClass();
 const router = Router();
 router.get("/", productClass.getProducts);
-router.get("/:pId", productClass.getProductbyId);
-router.get("/:code", productClass.getProductByCode);
+// router.get("/:pId", productClass.getProductbyId);
+router.get("/:pCode", productClass.getProductByCode);
+router.get("/mockingproducts", productClass.getMockingProducts);
 router.post("/", auth("user"), productClass.createProduct);
 router.put("/:pId", auth("user"), productClass.updateProduct);
 router.delete("/:pId", auth("user"), productClass.deleteProduct);

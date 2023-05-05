@@ -17,7 +17,7 @@ export class ProductRepositories {
       options: { limit: limit, page: page, sort: { sort }, lean: true },
     };
     try {
-      return await this.productsDao.getProducts();
+      return await this.productsDao.getProducts(objQuery);
     } catch (error) {
       console.log(error);
       return [];
@@ -27,6 +27,7 @@ export class ProductRepositories {
   getProductById = async (pId) => await this.productsDao.getProductById(pId);
   getProductByCode = async (pCode) =>
     await this.productsDao.getProductByCode(pCode);
+
   modProduct = async (params) => {
     const { pId, description, stock } = params;
     const objQuery = {

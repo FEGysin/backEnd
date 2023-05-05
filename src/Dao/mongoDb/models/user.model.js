@@ -29,9 +29,9 @@ const UserSchema = new Schema({
   // cartId: { type: Schema.Types.ObjectId, ref: "carts" },
   role: { type: String, default: "user" },
 });
-UserSchema.pre("find", function () {
-  this.populate("carts._id");
-  // this.populate("products.code").populate("users.userId");
-});
+// UserSchema.pre("find", function () {
+//   this.populate("carts._id");
+//   // this.populate("products.code").populate("users.userId");
+// });
 const UserModel = model(collection, UserSchema);
 export default UserModel;

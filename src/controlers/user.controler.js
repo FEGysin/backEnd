@@ -1,2 +1,2 @@
-import { userService } from "../repositories/index.js";
+import { userService } from "../services/index.js";
 export class UserClass {}

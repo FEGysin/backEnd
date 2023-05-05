@@ -38,7 +38,7 @@ export class CartRepositories {
           arrayFilters: [{ "elm.code": code }],
         },
       };
-      const result = await this.CartDao.updateOne(objUpdate);
+      const result = await this.CartDao.updateCart(objUpdate);
       if (result.modifiedCount > 0) {
         objUpdate.query = {
           $inc: {
@@ -46,7 +46,7 @@ export class CartRepositories {
           },
         };
         objUpdate.options = "";
-        await this.CartDao.updateOne(objUpdate);
+        await this.CartDao.updateCart(objUpdate);
 
         // await CartDao.updateOne(
         //   { userId: uId, cartId: cId },
@@ -72,7 +72,7 @@ export class CartRepositories {
         objUpdate.options = {
           arrayFilters: [{ "elm.code": code }],
         };
-        await this.CartDao.updateOne(objUpdate);
+        await this.CartDao.updateCart(objUpdate);
         //     await CartDao.updateOne(
         //       { userId: uId, cartId: cId },
         //       {
@@ -93,15 +93,19 @@ export class CartRepositories {
         //     );
         //   }
       }
-      return await this.CartDao.find({ userId: uId, cartId: cId }).lean();
+      return await this.CartDao.getCartById(cId).lean();
     }
   };
   buyCart = async (cId) => {
+    const cart = this.cartDao.getCartById(cId);
+    const nwCart = cart;
+    this.updateCart(nwCart);
     const objUpdate = {
       filter: { cartId: cId },
       query: { purchased: true },
       options: "",
     };
+    //generar ticket
     return await this.cartDao.updateCart(objUpdate);
   };
 }

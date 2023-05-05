@@ -1,4 +1,6 @@
-import { productService } from "../repositories/index.js";
+import { generateMockProducts } from "../mocking/products.mock.js";
+import { productService } from "../services/index.js";
+
 export class ProductClass {
   getProducts = async (req, res) => {
     try {
@@ -24,8 +26,9 @@ export class ProductClass {
     const { pCode } = req.params;
     try {
       const product = productService.getProductByCode(pCode);
+      console.log(product);
       if (!product) res.status(400).send("Producto invalido o inexistente");
-      res.json(product);
+      res.status(201).send(product);
     } catch (error) {
       console.log(error);
       res.status(400).send("Producto invalido o inexistente");
@@ -83,6 +86,23 @@ export class ProductClass {
     } catch (error) {
       console.log(error);
       return res.status(400).send({ message: "No se Pudo Eliminar Producto" });
+    }
+  };
+  getMockingProducts = async (req, res) => {
+    // console.log("Generando Mocks------");
+    let mockProducts = [];
+    try {
+      for (let i = 0; i < 100; i++) {
+        // console.log(`item ${i}`, mockProducts);
+        mockProducts.push(generateMockProducts());
+      }
+
+      return res.status(200).send(mockProducts);
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(400)
+        .send({ message: "No se Pudo generar Productos Mock" });
     }
   };
 }

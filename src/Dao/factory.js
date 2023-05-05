@@ -6,7 +6,7 @@ import { CartMannager } from "./mongoDb/cartMannager.js";
 let ProductDao;
 let UserDao;
 let CartDao;
-console.log(`Persistence : ${CfgObject.persistence}`);
+// console.log(`Persistence : ${CfgObject.persistence}`);
 switch (CfgObject.persistence) {
   case "MONGO":
     CfgObject.dbConnection();

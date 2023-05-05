@@ -1,4 +1,4 @@
-import { cartService } from "../repositories/index.js";
+import { cartService } from "../services/index.js";
 
 export class CartClass {
   getCarts = async (req, res) => {
