@@ -105,6 +105,7 @@ router.post("/restaurarpass", authClass.RestorePwd);
 //     })
 //     .redirect("/login");
 // });
+router.get("/loggerTest", authClass.TestLog);
 
 router.get("/logout", authClass.LogOut);
 

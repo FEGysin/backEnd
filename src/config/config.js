@@ -24,8 +24,8 @@ let CfgObject = {
   MONGO_URL: url,
   adminName: process.env.ADMIN_NAME || "admin",
   adminPassword: process.env.ADMIN_PASSWORD || "admin",
-
   persistence: process.env.PERSISTENCE,
+  appEnv: process.env.enviroment,
   dbConnection: () => MongoSingleton.getInstance(url),
   session: {
     store: MongoStore.create({

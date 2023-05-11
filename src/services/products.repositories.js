@@ -25,6 +25,7 @@ export class ProductRepositories {
   };
 
   getProductById = async (pId) => await this.productsDao.getProductById(pId);
+
   getProductByCode = async (pCode) =>
     await this.productsDao.getProductByCode(pCode);
 

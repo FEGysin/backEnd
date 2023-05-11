@@ -1,7 +1,6 @@
 import express, { urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import handlebars from "express-handlebars";
-import logger from "morgan";
 
 import session from "express-session";
 import cors from "cors";
@@ -16,6 +15,7 @@ import __dirname from "./dirname.js";
 
 import { initializePassport } from "./middleware/initialPassport.js";
 import passport from "passport";
+import { addLogger } from "./utils/logger.js";
 
 const app = express();
 const httpServer = new HttpServer.Server(app);
@@ -31,7 +31,7 @@ app.use(cookieParser());
 initializePassport();
 app.use(passport.initialize());
 
-app.use(logger("dev"));
+app.use(addLogger);
 
 app.use(session(CfgObject.session));
 
