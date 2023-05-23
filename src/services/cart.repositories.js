@@ -2,8 +2,11 @@ export class CartRepositories {
   constructor(cartDao) {
     this.cartDao = cartDao;
   }
-  createCart = async (uId, pId) => {
-    let { products, cartTotal } = cart;
+  createCart = async (cart) => {
+    let { uId, pId, code, quantity, cartTotal } = cart;
+    let products = [];
+    let product = { pId, code, quantity };
+    products.push(product);
     userId = !uId ? 1 : uId;
 
     return await cartDao.create({
@@ -13,8 +16,8 @@ export class CartRepositories {
     });
   };
 
-  updateCart = async (params) => {
-    let { uId, cId, prodId, cartTotal, code, price, quantity } = params;
+  updateCart = async (cart) => {
+    let { uId, cId, prodId, cartTotal, code, price, quantity } = cart;
 
     uId = !uId ? 1 : uId;
     cartTotal = !cartTotal ? price : cartTotal;
