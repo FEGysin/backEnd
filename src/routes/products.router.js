@@ -3,27 +3,27 @@ import { ProductClass } from "../controlers/products.controler.js";
 import { authToken } from "../utils/jsonwt.js";
 const productClass = new ProductClass();
 const router = Router();
-router.get("/", productClass.getProducts);
+router.get("/", productClass.getProducts());
 // router.get("/:pId", productClass.getProductbyId);
-router.get("/:pCode", authToken, productClass.getProductByCode);
-router.get("/mockingproducts", authToken, productClass.getMockingProducts);
+router.get("/:pCode", authToken, productClass.getProductByCode());
+router.get("/mockingproducts", authToken, productClass.getMockingProducts());
 router.post(
   "/",
   authToken,
   auth(["admin", "premium"]),
-  productClass.createProduct
+  productClass.createProduct()
 );
 router.put(
   "/:pId",
   authToken,
   auth(["admin", "premium"]),
-  productClass.updateProduct
+  productClass.updateProduct()
 );
 router.delete(
   "/:pId",
   authToken,
   auth(["admin", "premium"]),
-  productClass.deleteProduct
+  productClass.deleteProduct()
 );
 
 // router.get("/", async (req, res) => {

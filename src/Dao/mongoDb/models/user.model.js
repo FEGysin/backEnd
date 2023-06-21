@@ -28,6 +28,13 @@ const UserSchema = new Schema({
   // ],
   // cartId: { type: Schema.Types.ObjectId, ref: "carts" },
   role: { type: String, default: "user" },
+  documents: [
+    {
+      name: { type: String },
+      reference: { type: String },
+    },
+  ],
+  last_connection: { type: Date },
 });
 // UserSchema.pre("find", function () {
 //   this.populate("carts._id");

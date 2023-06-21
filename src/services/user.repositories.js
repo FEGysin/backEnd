@@ -9,7 +9,8 @@ export class UserRepositories {
   getUsers = async () => await this.userDao.getUsers();
   getUser = async (eMail) => await this.userDao.getUser(eMail);
   userExists = async (eMail) => await this.userDao.userExists(eMail);
-  UpdateUser = async () => {
+  getUserById = async (uId) => await this.userDao.getUserById(uId);
+  updateUser = async () => {
     return true;
   };
   deleteUser = async (eMail) => await this.userDao.deleteUser(eMail);
