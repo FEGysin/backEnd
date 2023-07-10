@@ -1,4 +1,4 @@
-import { connect } from "mongoose";
+import { connect, connection } from "mongoose";
 class MongoSingleton {
   static #instance;
   constructor(url) {
@@ -12,5 +12,5 @@ class MongoSingleton {
     return this.#instance;
   }
 }
-
-export { MongoSingleton };
+const ocnnMongo = connection;
+export { MongoSingleton, ocnnMongo };

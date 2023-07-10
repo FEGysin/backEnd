@@ -8,13 +8,13 @@ const CartSchema = new Schema({
     index: true,
     unique: true,
   },
-  cartId: {
-    type: String,
-    required: true,
-    index: true,
-    unique: true,
-  },
-  // eMail: { type: String, required: true },
+  // cartId: {
+  //   type: String,
+  //   required: true,
+  //   index: true,
+  //   unique: true,
+  // },
+  eMail: { type: String, required: true },
   products: {
     type: [
       {
@@ -33,7 +33,7 @@ const CartSchema = new Schema({
 });
 CartSchema.pre("find", function () {
   this.populate("products._id");
-  // this.populate("products.code").populate("users.userId");
+  // this.populate("products.code").populate("users._Id");
 });
 const CartModel = model(collection, CartSchema);
 

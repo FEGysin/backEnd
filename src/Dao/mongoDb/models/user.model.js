@@ -10,23 +10,25 @@ const UserSchema = new Schema({
     unique: true,
     index: true,
   },
+  birthDate: { type: Date, requiered: true },
   age: {
     type: Number,
   },
   password: { type: String },
-  // phone: { String },
-  // adress: [
-  //   {
-  //     streetName: { String },
-  //     number: { Number },
-  //     floor: { Number },
-  //     door: { String },
-  //     zipCode: { String },
-  //     country: { String },
-  //     state: { String },
-  //   },
-  // ],
+  phone: { String },
+  adress: [
+    {
+      streetName: { String },
+      number: { Number },
+      floor: { Number },
+      door: { String },
+      zipCode: { String },
+      country: { String },
+      state: { String },
+    },
+  ],
   // cartId: { type: Schema.Types.ObjectId, ref: "carts" },
+  cartId: { type: String, default: "" },
   role: { type: String, default: "user" },
   documents: [
     {

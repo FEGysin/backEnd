@@ -1,6 +1,7 @@
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
-const PRIVATE_KEY = "H0l4T4r10l4";
+import { CfgObject } from "../config/config";
 
+const PRIVATE_KEY = CfgObject.jwt_Private_Key;
 const generateToken = (user, expire = "24h") => {
   const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: expire });
   return token;
