@@ -3,10 +3,10 @@ export class UserRepositories {
     this.userDao = userDao;
   }
   createUser = async ({ user }) => {
-    const nwUser = user;
-    await this.userDao.creatuUser({ nwUser });
+    const nwUser = userDTO.nwUser(user);
+    await this.userDao.createUser({ nwUser });
   };
-  getUsers = async () => await this.userDao.getUsers();
+  getUsers = async () => await this.userDao.getUsers;
   getUser = async (eMail) => await this.userDao.getUser(eMail);
   userExists = async (eMail) => await this.userDao.userExists(eMail);
   getUserById = async (uId) => await this.userDao.getUserById(uId);

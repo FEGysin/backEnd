@@ -1,5 +1,5 @@
-import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
-import { CfgObject } from "../config/config";
+import jwt from "jsonwebtoken";
+import { CfgObject } from "../config/config.js";
 
 const PRIVATE_KEY = CfgObject.jwt_Private_Key;
 const generateToken = (user, expire = "24h") => {
@@ -14,13 +14,13 @@ const authToken = (req, res, next) => {
   }
   const token = authHeader.split(" ")[1];
   jwt.verify(token, PRIVATE_KEY, (error, credential) => {
-    if (error instanceof TokenExpiredError)
+    if (error instanceof jwt.TokenExpiredError)
       res
         .status(401)
         .json({ status: "error", error: "Token has expired" })
         .redirect("/logout");
 
-    if (error instanceof JsonWebTokenError)
+    if (error instanceof jwt.JsonWebTokenError)
       res
         .status(401)
         .json({ status: "error", error: "Token corrompido" })

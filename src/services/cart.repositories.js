@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { CfgObject } from "../config/config";
-import { ocnnMongo } from "../config/mongoSingleton";
+import { CfgObject } from "../config/config.js";
+// import { ocnnMongo } from "../config/mongoSingleton.js";
 
 export class CartRepositories {
   constructor(cartDao) {
@@ -27,7 +27,7 @@ export class CartRepositories {
     cId = !cId ? 1 : cId;
     quantity = !quantity ? 1 : quantity;
 
-    const mongoSession = ocnnMongo.startSession();
+    // const mongoSession = ocnnMongo.startSession();
 
     if (!this.cartDao.cartExist(uId, cId)) {
       let products = [];
@@ -36,7 +36,7 @@ export class CartRepositories {
       const nWreg = Object.assign({}, { products }, params);
     } else {
       try {
-        (await mongoSession).startTransaction();
+        // (await mongoSession).startTransaction();
 
         const objUpdate = {
           filter: { userId: uId, cartId: cId },
@@ -46,7 +46,8 @@ export class CartRepositories {
             },
           },
           options: {
-            arrayFilters: [{ "elm.code": code }, { session: mongoSession }],
+            // arrayFilters: [{ "elm.code": code }, { session: mongoSession }],
+            arrayFilters: [{ "elm.code": code }],
           },
         };
         const result = await this.CartDao.updateCart(objUpdate);
@@ -56,7 +57,8 @@ export class CartRepositories {
               cartTotal: price * quantity,
             },
           };
-          objUpdate.options = [{ session: mongoSession }];
+          //  objUpdate.options = [{ session: mongoSession }];
+          objUpdate.options = [];
           await this.CartDao.updateCart(objUpdate);
 
           // await CartDao.updateOne(
@@ -104,11 +106,11 @@ export class CartRepositories {
           //     );
           //   }
         }
-        (await mongoSession).commitTransaction();
+        // (await mongoSession).commitTransaction();
       } catch (error) {
-        (await mongoSession).abortTransaction;
+        // (await mongoSession).abortTransaction;
       }
-      (await mongoSession).endSession();
+      // (await mongoSession).endSession();
       return await this.CartDao.getCartById(cId).lean();
     }
   };

@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { UserClass } from "../controlers/user.controler.js";
-
 import { authToken } from "../utils/jsonwt.js";
+const userClass = new UserClass();
 const router = Router();
-router.get("/:uId", authToken, UserClass.getUserById());
-router.get("/current", authToken, UserClass.getCurUser);
-router.get("/premium/:uId", authToken, UserClass.getUserById());
-router.get("/:uid/documents", authToken, UserClass.getUserById());
-router.post("/:uid/documents", authToken, UserClass.updateUser);
-router.delete("/:uId", authToken, UserClass.deleteUser);
+
+router.get("/:uId", authToken, userClass.getUserById);
+router
+  .get("/current", authToken, userClass.getCurUser)
+  .get("/premium/:uId", authToken, userClass.getUserById)
+  .get("/:uid/documents", authToken, userClass.getUserById)
+  .post("/:uid/documents", authToken, userClass.updateUser)
+  .delete("/:uId", authToken, userClass.deleteUser);
 export default router;

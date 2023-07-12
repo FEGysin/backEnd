@@ -1,4 +1,4 @@
-import { GetAge } from "../utils/dateDiff";
+import { GetAge } from "../utils/dateDiff.js";
 export class userDTO {
   nwUser = (user) => {
     return {
@@ -26,19 +26,17 @@ export class userDTO {
       last_connection: new Date().toLocaleDateString(),
     };
   };
-  // modUser = (user, data) =>
-  // {
-  //   return {};
-  // };
+
   tokenUser = (user) => {
     return {
+      uId: user._id,
       fullName: `${user.firstName} ${user.lastName}`,
       eMail: user.eMail,
       birthDate: user.birthDate,
+      cId: user.cartId,
       age: user.age,
       phone: user.phone,
       adress: user.adress,
-      cartId: user.cartId,
       role: user.role,
     };
   };
