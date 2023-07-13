@@ -9,10 +9,13 @@ const generateToken = (user, expire = "24h") => {
 
 const authToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  if (!authHeader) {
+
+  if (!authHeader && !req.cookies["coderCookieToken"]) {
+    console.log(req.cookies["coderCookieToken"]);
     res.status(401).json({ status: "error", error: "not Autenticated" });
   }
-  const token = authHeader.split(" ")[1];
+  const token = authHeader?.split(" ")[1] || req.cookies["coderCookieToken"];
+
   jwt.verify(token, PRIVATE_KEY, (error, credential) => {
     if (error instanceof jwt.TokenExpiredError)
       res

@@ -1,6 +1,7 @@
 <h2><strng>Listo PRODUCTS Handlebars</strng></h2>
 <hr>
 <div>
+
 {{#each prodList.docs}}
 {{!-- <div class="Product">
     <a href="/pId={{this.code}}" >Producto : {{this.title}}</a>
@@ -11,7 +12,7 @@
     <input Id={{this.code}} type="button" name="button" value="Enviar" onclick="ProductPUT(this.form)" >
     <hr>
 </div> --}}
-<form action= "/api/cart/1/products/{{this.code}}" method="POST">
+<form action= "/api/cart/{{../cId}}/products/{{this.code}}" method="POST">
 <input type="hidden" name="prodId" value="{{this._id}}">
 <input  type="hidden" name="code"value="{{this.code}}">
 

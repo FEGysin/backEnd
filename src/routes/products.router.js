@@ -5,7 +5,7 @@ import { authToken } from "../utils/jsonwt.js";
 const productClass = new ProductClass();
 const router = Router();
 router
-  .get("/", productClass.getProducts)
+  .get("/", authToken, productClass.getProducts)
   // .get("/:pId", productClass.getProductbyId);
   .get("/:pCode", authToken, productClass.getProductByCode)
   .get("/mockingproducts", authToken, productClass.getMockingProducts)

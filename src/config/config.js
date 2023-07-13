@@ -2,16 +2,16 @@ import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import { commander } from "../utils/commander.js";
 import { MongoSingleton } from "./mongoSingleton.js";
-
 const { mode } = commander.opts();
 
 const enviroment = mode || "developement";
+
 dotenv.config({
   path:
-    enviroment === "developement"
-      ? "../.env.developement"
-      : "../.env.production",
+    enviroment === "developement" ? "./.env.developement" : "./.env.production",
 });
+console.log(process.env.MONGO_URL);
+
 const url = process.env.MONGO_URL || "mongodb://localhost:27017";
 
 let CfgObject = {

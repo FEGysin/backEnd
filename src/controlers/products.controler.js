@@ -6,7 +6,12 @@ export class ProductClass {
     try {
       const prodList = await productService.getProducts(req.query);
       // prodList=Object.assign({},req.user._id,{prodList})
-      res.render("products", { prodList, style: "products.css" });
+      res.render("products", {
+        prodList,
+        cId: req.user.cId,
+        style: "products.css",
+      });
+      //
     } catch (error) {
       console.log(error);
     }

@@ -2,7 +2,7 @@ import { userService } from "../services/index.js";
 export class UserClass {
   getUsers = async (req, res) => {
     try {
-      const users = userService.getUsers;
+      const users = userService.getUsers();
       return res.status(200).send({ status: "OK", payload: users });
     } catch (error) {
       return res

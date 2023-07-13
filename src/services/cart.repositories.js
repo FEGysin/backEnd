@@ -1,7 +1,4 @@
-import mongoose from "mongoose";
-import { CfgObject } from "../config/config.js";
-// import { ocnnMongo } from "../config/mongoSingleton.js";
-
+import { UserRepositories } from "./user.repositories.js";
 export class CartRepositories {
   constructor(cartDao) {
     this.cartDao = cartDao;
@@ -22,18 +19,15 @@ export class CartRepositories {
 
   updateCart = async (cart) => {
     let { uId, cId, prodId, cartTotal, code, price, quantity } = cart;
+
     uId = !uId ? 1 : uId;
     cartTotal = !cartTotal ? price : cartTotal;
-    cId = !cId ? 1 : cId;
     quantity = !quantity ? 1 : quantity;
 
     // const mongoSession = ocnnMongo.startSession();
 
     if (!this.cartDao.cartExist(uId, cId)) {
-      let products = [];
-      let product = { prodId, code, quantity };
-      products.push(product);
-      const nWreg = Object.assign({}, { products }, params);
+      console.log(this.createCart({ ...cart, cartTotal, quantity }));
     } else {
       try {
         // (await mongoSession).startTransaction();
@@ -114,6 +108,7 @@ export class CartRepositories {
       return await this.CartDao.getCartById(cId).lean();
     }
   };
+
   buyCart = async (cId) => {
     const cart = this.cartDao.getCartById(cId);
     const nwCart = cart;

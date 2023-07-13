@@ -1,9 +1,10 @@
 import { userService } from "../services/index.js";
 import { generateToken } from "../utils/jsonwt.js";
 import { isValidPassword, createHash } from "../utils/bCrypt.js";
+import { CartMannager } from "../Dao/mongoDb/cartMannager.js";
 import SendmailTransport from "nodemailer/lib/sendmail-transport/index.js";
 import { sendMail } from "../utils/sendMail.js";
-import { userDTO } from "../dto/user.dto.js";
+import { UserDTO } from "../dto/user.dto.js";
 export class AuthClass {
   navLogIn = async (req, res) => {
     res.status(200).render("login");
@@ -11,25 +12,26 @@ export class AuthClass {
 
   LogIn = async (req, res) => {
     const { eMail, password } = req.body;
-    const user = await userService.getUser(eMail);
+    const users = await userService.getUser(eMail);
+    const user = users[0];
     if (!user)
       return res
         .status(401)
         .send({ status: "error", error: "Usuario inexistente" });
-
     if (!isValidPassword(user, password))
       return res
         .status(401)
         .send({ status: "error", error: "Usuario Password Invalido" });
 
-    // const { password: pass, ...rest } = user;
-    const tokenUser = userDTO.tokenUser(user);
+    const tokenUser = new UserDTO(user).tokenUser();
     const token = generateToken(tokenUser);
-
-    res
-      .cookie("coderCookieToken", token, { maxAge: 60 * 60 * 1000 })
-      .status(200)
-      .redirect("/api/products");
+    return res
+      .cookie("coderCookieToken", token, {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+      })
+      .status(200);
+    // .redirect("/api/products");
   };
 
   navRegister = async (req, res) => {
@@ -37,23 +39,17 @@ export class AuthClass {
   };
 
   Register = async (req, res) => {
-    const { firstName, lastName, eMail, age, password } = req.body;
-
-    let exists = await userService.exists(eMail);
+    const { eMail } = req.body;
+    let exists = await userService.userExists(eMail);
     if (exists)
       return res
         .status(401)
         .send({ status: "error", error: "User Registered in DataBase" });
-    const user = {
-      firstName,
-      lastName,
-      eMail,
-      age,
-      password: createHash(password),
-    };
-    await userService.createUser(user);
+    const user = await userService.createUser(req.body);
+    const userDTO = new UserDTO(user);
 
-    const access_token = generateToken(user);
+    const access_token = generateToken(userDTO.tokenUser());
+
     res.status(200).json({
       status: "success",
       access_token,

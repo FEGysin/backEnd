@@ -6,6 +6,7 @@ const router = Router();
 
 router.get("/:uId", authToken, userClass.getUserById);
 router
+  .get("/", authToken, userClass.getUsers)
   .get("/current", authToken, userClass.getCurUser)
   .get("/premium/:uId", authToken, userClass.getUserById)
   .get("/:uid/documents", authToken, userClass.getUserById)

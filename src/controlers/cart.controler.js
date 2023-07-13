@@ -72,7 +72,13 @@ export class CartClass {
       });
 
     try {
-      req.body = Object.assign({}, { cId }, { pId }, req.body);
+      req.body = Object.assign(
+        {},
+        { uId: req.user.uId },
+        { cId },
+        { pId },
+        req.body
+      );
       await cartService.updateCart(req.body);
       res.status(200).send({ status: "ok", message: "Carrito Modificado" });
     } catch (error) {
